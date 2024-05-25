@@ -1,5 +1,7 @@
-#include <string.h>
 #include <stdio.h>
+#include <limits.h>
+#include <stdbool.h>
+
 
 int lr1(void)
 {
@@ -22,6 +24,28 @@ int lr1(void)
   printf("P=%f", P);
 
   return 0;
+}
+
+float calculate_P(float A, float B, float C)
+{
+ float P, t1, t2;
+ t1=A*B+C*C;
+ t2=B*C+A;
+ P = t1/t2;
+ return P;
+ }
+int lr1_dop(void)
+{
+ float P, A, B, C;
+ printf("A=");
+ scanf("%f", &A);
+ printf("B=");
+ scanf("%f", &B);
+ printf("C=");
+ scanf("%f", &C);
+
+printf("P=%f", calculate_P(A, B, C) );
+ return 0;
 }
 
 int lr2(void)
@@ -53,7 +77,31 @@ int lr2(void)
     return 0;
 }
 
-
+int lr2_dop(void)
+{
+ long double s,a;
+ int n,i,k,x, x1, fak, cnt;
+ printf("n=");
+ scanf("%d", &n);
+ printf("x=");
+ scanf("%d", &x);
+ s=0;
+ k=1;
+ i=0;
+ x1 = 1;
+ fak = 1;
+ for(int cnt =0; cnt<n; cnt++)
+ {
+ a=(x1)/(float)fak;
+ s=s+a*k;
+ k=-k;
+ i=i+2;
+ fak = fak*(i-1)*i;
+ x1 = x1 * x * x;
+ }
+ printf("s=%lf",s);
+ return 0;
+}
 
 
 int lr3(void)
@@ -93,10 +141,114 @@ int lr3(void)
 }
 
 
+#define bool int
+#define true 1
+#define false 0
+
+bool is_vowel(char c)
+{
+    if(c == 'a' 
+        || c == 'y'
+        || c == 'u'
+        || c == 'e'
+        || c == 'o')
+        return true;
+
+    return false;
+}
 
 
+int lr3_dop(void)
+{
+    int sum = 0;
+    int cnt = 0;
+    int prevC = 0;
+    int c;
+    bool is_only_consonants = true;
+
+    prevC = getchar();
+    while ((c = getchar()) != '?')
+    {
+        if (c == ' ' || c == '\n' || c == '\t' || c == ',')
+        {
+            if (sum == 0 && is_only_consonants == false)
+                cnt += 1;
+            else
+                sum = 0;
+
+            is_only_consonants = true;
+            prevC = getchar();
+            if (prevC == '?')
+                break;
+
+            continue;
+
+        }
+        else
+        {
+            sum += c - prevC;
+
+            if(is_vowel(c) == true)
+                is_only_consonants = false;
+        }
+
+        prevC = c;
+    }
+
+    printf("%d", cnt);
+
+
+    return 0;
+}
+
+
+
+
+void removeDuplicates(char *input_str) {
+    int wordCount = 0;
+    int wordStart = 0;
+    bool foundDuplicate = false;
+
+    for (int i = 0; input_str[i] != '\0'; i++) {
+        if (input_str[i] == ' ' || input_str[i] == '\n') {
+            foundDuplicate = false;
+            for (int j = wordStart; j < i; j++) {
+                for (int k = i + 1; k < strlen(input_str); k++) {
+                    if (input_str[j] == input_str[k]) {
+                        foundDuplicate = true;
+                        break;
+                    }
+                }
+            }
+            if (!foundDuplicate) {
+                for (int j = wordStart; j < i; j++) {
+                    printf("%c", input_str[j]);
+                }
+                if (wordCount > 0) {
+                    printf(" ");
+                }
+                wordCount++;
+            }
+            wordStart = i + 1;
+        }
+    }
+}
 
 int lr4(void) {
+    char input_str[100];
+
+    printf("Введите слова: ");
+    fgets(input_str, sizeof(input_str), stdin);
+
+    printf("Результат: ");
+    removeDuplicates(input_str);
+
+    return 0;
+}
+
+
+
+int lr4_dop(void) {
     char inputprintf[1000];
     printf("Введите символьную строку: ");
     getchar();
@@ -185,6 +337,92 @@ int lr5(void) {
 }
 
 
+#include <stdio.h>
+struct name {
+ int max;
+ int sum;
+ int cnt;
+ float avg;
+};
+int summ(int arr[10])
+{
+ int sum = 0;
+ for (int i = 0; i < 10; i++)
+
+{
+ int num = arr[i];
+ while (num > 0)
+
+{
+ sum += num % 10;
+ num /= 10;
+
+}
+
+}
+ return sum; }
+int maximum(int arr[10]) {
+ int max_num =
+-1;
+ for (int i = 0; i < 10; i++)
+
+{
+ int num = arr[i];
+ if (num > max_num)
+
+{
+ max_num = num;
+
+}
+
+}
+ return max_num; }
+int cnt(int arr[10]) {
+ int totalDigits = 0;
+ for (int i = 0; i < 10; i++) {
+ int num = arr[i];
+ while (num > 0)
+
+{
+ num /= 10;
+ totalDigits++;
+
+}
+
+}
+ return totalDigits; }
+float avg(int arr[10]) {
+ int sum = 0;
+ int totalDigits = 0;
+ for (int i = 0; i < 10; i++) {
+ int num = arr[i];
+ while (num > 0)
+ {
+ sum += num % 10;
+ num /= 10;
+ totalDigits++;
+ }
+ }
+ float average = (float)sum / totalDigits;
+ return average;
+}
+int lr5_dop(void)
+{
+ int arr[10] = { 123, 456, 789, 321, 654, 987, 741, 852, 963, 159 };
+ struct name huina;
+ huina.avg = avg(arr);
+ huina.sum = summ(arr);
+ huina.max = maximum(arr);
+ huina.cnt = cnt(arr);
+ printf("Сумма цифр: %d\n", huina.sum);
+ printf("Общее количество цифр: %d\n", huina.cnt);
+ printf("Среднее арифметическое цифр: %.2f\n", huina.avg);
+ printf("%d\n", huina.max);
+;
+ return 0;
+}
+
+
 
 #include <stdio.h>
 #define N 5
@@ -232,31 +470,48 @@ int lr6(void)
 }
 
 
-#include <stdio.h>
-#include <math.h>
+
+
+
+// Функция для вывода числа в двоичной системе
+void printBinary(long long num)
+{
+    if (num > 1)
+        printBinary(num >> 1);
+
+    printf("%lld", num & 1);
+}
+
 int lr7(void)
 {
-  int n;
-  int cnt = 1;
-  int index;
-  scanf("%d", &n);
-  int n1 = n;
+    long long n;
+    printf("Введите целое число N: ");
+    scanf("%lld", &n);
 
-  while(n > 0)
-  {
-     if (n % 10 == 1)
-     {
-       index = cnt;
-       cnt += 1;
-       n /=10;
-     }
-    else
-     {
-      cnt += 1;
-      n /=10;
-     }
-  } 
-n1 = n1 / pow(10, (index - 1));
-n1 = n1 * pow(10, (index - 1));
-printf("%d", n1);
+ // Определяем позицию старшей единицы, чтобы обнулить все биты после нее
+    int pos = 0;
+    long long temp = n;
+    while (temp > 0) 
+    {
+        temp >>= 1;
+        pos++;
+    }
+
+    // Обнуляем разряды, стоящие правее старшей единицы
+    long long mask = 1;
+    mask = (mask << (pos - 1)); // Создаем маску из единиц справа от старшей единицы
+    long long result = N & mask;
+
+    printf("Исходное число: ");
+    printBinary(n);
+    printf("\n");
+
+    printf("Позиция старшей единицы: %d\n", pos); // Нумерация битов с 0
+
+    printf("Результат: ");
+    printBinary(result);
+    printf("\n");
+
+    return 0;
 }
+
