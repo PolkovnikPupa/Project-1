@@ -1,7 +1,10 @@
 #include "lr.h"
+#include <Windows.h>
 
 int main(void) 
 {
+  SetConsoleOutputCP(65001);
+
   int n;
   printf("Введите номер лабы: ");
   scanf("%d",&n);
